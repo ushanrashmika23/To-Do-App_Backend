@@ -2,6 +2,7 @@ package com.example.todoapp.Controller;
 
 import com.example.todoapp.DTO.ResponseDTO;
 import com.example.todoapp.DTO.TodoDTO;
+import com.example.todoapp.Entity.TodoEntity;
 import com.example.todoapp.Service.TodoService;
 import com.example.todoapp.Util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,9 +65,10 @@ public class TodoController {
     @DeleteMapping(value = "delete/{id}")
     public ResponseEntity deleteTodo(@PathVariable int id) {
         try {
+            TodoDTO todo=todoService.getTodoById(id);
             String res = todoService.deleteTodo(id);
             if (res.equals(VarList.RSP_SUCCESS)) {
-                responseDTO.setResponse(VarList.RSP_SUCCESS, "Todo Deleted @" + id, null);
+                responseDTO.setResponse(VarList.RSP_SUCCESS, "Todo Deleted @" + id, todo);
                 return new ResponseEntity(responseDTO, HttpStatus.OK);
             } else if (res.equals(VarList.RSP_NO_DATA_FOUND)) {
                 responseDTO.setResponse(VarList.RSP_NO_DATA_FOUND, "Todo Not Found @" + id, null);
@@ -105,9 +107,11 @@ public class TodoController {
     @PutMapping(value = "doneStatus/{id}")
     public ResponseEntity updateTodoStatus(@PathVariable int id) {
         try {
+            TodoDTO beforeTodo = todoService.getTodoById(id);
             String res = todoService.updateTodoStatus(id);
+            TodoDTO todo = todoService.getTodoById(id);
             if (res.equals(VarList.RSP_SUCCESS)) {
-                responseDTO.setResponse(VarList.RSP_SUCCESS, "Todo Updated @" + id, null);
+                responseDTO.setResponse(VarList.RSP_SUCCESS, "Todo Updated @" + id +"   "+ beforeTodo.isTodoDone()+" -> "+todo.isTodoDone(), todo);
                 return new ResponseEntity(responseDTO, HttpStatus.OK);
             } else if (res.equals(VarList.RSP_NO_DATA_FOUND)) {
 
