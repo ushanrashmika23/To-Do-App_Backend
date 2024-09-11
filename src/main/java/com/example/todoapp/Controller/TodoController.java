@@ -64,20 +64,40 @@ public class TodoController {
     public ResponseEntity deleteTodo(@PathVariable int id) {
         try {
             String res = todoService.deleteTodo(id);
-            if(res.equals(VarList.RSP_SUCCESS)){
-                responseDTO.setResponse(VarList.RSP_SUCCESS, "Todo Deleted @"+id, null);
+            if (res.equals(VarList.RSP_SUCCESS)) {
+                responseDTO.setResponse(VarList.RSP_SUCCESS, "Todo Deleted @" + id, null);
                 return new ResponseEntity(responseDTO, HttpStatus.OK);
-            }else if(res.equals(VarList.RSP_NO_DATA_FOUND)){
-                responseDTO.setResponse(VarList.RSP_NO_DATA_FOUND, "Todo Not Found @"+id, null);
+            } else if (res.equals(VarList.RSP_NO_DATA_FOUND)) {
+                responseDTO.setResponse(VarList.RSP_NO_DATA_FOUND, "Todo Not Found @" + id, null);
                 return new ResponseEntity(responseDTO, HttpStatus.BAD_REQUEST);
-            }else {
-                responseDTO.setResponse(VarList.RSP_ERROR, "Error Occurred @"+id, null);
+            } else {
+                responseDTO.setResponse(VarList.RSP_ERROR, "Error Occurred @" + id, null);
                 return new ResponseEntity(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } catch (Exception e) {
-            responseDTO.setResponse(VarList.RSP_ERROR, "Error Occurred @"+id, e.getMessage());
+            responseDTO.setResponse(VarList.RSP_ERROR, "Error Occurred @" + id, e.getMessage());
             return new ResponseEntity(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @GetMapping(value = "get/{id}")
+    public ResponseEntity getTodoById(@PathVariable int id) {
+        try {
+            TodoDTO todo = todoService.getTodoById(id);
+            if(todo != null) {
+                responseDTO.setResponse(VarList.RSP_SUCCESS, "Todo Found @" + id, todo);
+                return new ResponseEntity(responseDTO, HttpStatus.OK);
+            }else if(todo == null){
+                responseDTO.setResponse(VarList.RSP_NO_DATA_FOUND, "Todo Not Found @" + id, null);
+                return new ResponseEntity(responseDTO, HttpStatus.BAD_REQUEST);
+            }else{
+                responseDTO.setResponse(VarList.RSP_ERROR, "Error Occurred @" + id, null);
+                return new ResponseEntity(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch (Exception e) {
+            responseDTO.setResponse(VarList.RSP_ERROR, "Error Occurred @" + id, e.getMessage());
+            return new ResponseEntity(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
