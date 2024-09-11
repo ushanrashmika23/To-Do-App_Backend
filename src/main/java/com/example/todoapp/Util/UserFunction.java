@@ -18,3 +18,5 @@ public class UserFunction {
         return now.format(timeFormatter);
     }
 }
+
+

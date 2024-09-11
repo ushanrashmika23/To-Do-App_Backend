@@ -51,4 +51,24 @@ public class TodoService {
             return VarList.RSP_NO_DATA_FOUND;
         }
     }
+
+    public TodoDTO getTodoById(int id) {
+        if (todoRepo.existsById(id)) {
+            TodoEntity todo = todoRepo.findById(id).get();
+            return modelMapper.map(todo, TodoDTO.class);
+        } else {
+            return null;
+        }
+    }
+
+    public String updateTodoStatus(int todoID) {
+        if(todoRepo.existsById(todoID)) {
+            TodoEntity todo = todoRepo.findById(todoID).get();
+            todo.setTodoDone(!todo.isTodoDone());
+            todoRepo.save(todo);
+            return VarList.RSP_SUCCESS;
+        }else{
+            return VarList.RSP_NO_DATA_FOUND;
+        }
+    }
 }
