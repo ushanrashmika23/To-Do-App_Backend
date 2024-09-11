@@ -60,4 +60,15 @@ public class TodoService {
             return null;
         }
     }
+
+    public String updateTodoStatus(int todoID) {
+        if(todoRepo.existsById(todoID)) {
+            TodoEntity todo = todoRepo.findById(todoID).get();
+            todo.setTodoDone(!todo.isTodoDone());
+            todoRepo.save(todo);
+            return VarList.RSP_SUCCESS;
+        }else{
+            return VarList.RSP_NO_DATA_FOUND;
+        }
+    }
 }
